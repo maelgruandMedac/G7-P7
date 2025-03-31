@@ -5,13 +5,15 @@ import com.p8.Constantes;
 
 public class Usuario {
     private String nombreUsuario;
+    private String contrasena;
     private Scanner sc;
 
-	// Constructor de la clase Usuario
+    // Constructor de la clase Usuario
     public Usuario(Scanner scan) {
         this.sc = scan;
     }
-	// Getters y Setters
+
+    // Getters y Setters
     public void setNombreUsuario(String username) {
         this.nombreUsuario = username;
     }
@@ -23,7 +25,8 @@ public class Usuario {
     public Scanner getScanner() {
         return sc;
     }
-	// Metodo para validar el solicitado de nombre  de usuario
+
+    // Metodo para validar el solicitado de nombre  de usuario
     public String solicitarNombreUsuario() {
         String username;
         while (true) {
@@ -35,7 +38,7 @@ public class Usuario {
         }
     }
 
-	//Boolean para validar Nombre de usuario
+    // Boolean para validar Nombre de usuario
     private boolean validarNombreUsuario(String username) {
         if (username.contains(" ")) {
             System.out.println(Constantes.ERROR_ESPACIO.getValeur());
@@ -51,7 +54,8 @@ public class Usuario {
         }
         return true;
     }
-	// Methodo para solicictar la contraseña
+
+    // Methodo para solicictar la contraseña
     public String solicitarContrasena(String username) {
         String password;
         while (true) {
@@ -61,8 +65,9 @@ public class Usuario {
                 return password;
             }
         }
-    }	
-	// Metodo para validar la contraseña
+    }
+
+    // Metodo para validar la contraseña
     private boolean validarContrasena(String username, String password) {
         if (password.contains(" ")) {
             System.out.println(Constantes.ERROR_ESPACIO.getValeur());
@@ -86,12 +91,24 @@ public class Usuario {
         }
         return true;
     }
-	// Metodo para registrar el usuario
+
+    // Metodo para registrar el usuario
     public String registrarUsuario() {
         String username = solicitarNombreUsuario();
         String password = solicitarContrasena(username);
-        return username + ":" + password;
+        this.nombreUsuario = username.trim(); // Almacenamos el nombre de usuario sin espacios al inicio y al final
+        this.contrasena = password.trim();    // Almacenamos la contraseña sin espacios al inicio y al final
+        return this.nombreUsuario + ":" + this.contrasena;
     }
-	
 
-}	
+    // Metodo para iniciar sesión
+    public boolean iniciarSesion(String username, String password) {
+        username = username.trim();
+        password = password.trim();
+
+        if (this.nombreUsuario != null && this.contrasena != null) {
+            return this.nombreUsuario.equalsIgnoreCase(username) && this.contrasena.equals(password);
+        }
+        return false;
+    }
+}
