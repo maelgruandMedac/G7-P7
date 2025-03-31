@@ -7,10 +7,11 @@ public class Usuario {
     private String nombreUsuario;
     private Scanner sc;
 
+	// Constructor de la clase Usuario
     public Usuario(Scanner scan) {
         this.sc = scan;
     }
-
+	// Getters y Setters
     public void setNombreUsuario(String username) {
         this.nombreUsuario = username;
     }
@@ -22,7 +23,7 @@ public class Usuario {
     public Scanner getScanner() {
         return sc;
     }
-
+	// Metodo para validar el solicitado de nombre  de usuario
     public String solicitarNombreUsuario() {
         String username;
         while (true) {
@@ -34,6 +35,7 @@ public class Usuario {
         }
     }
 
+	//Boolean para validar Nombre de usuario
     private boolean validarNombreUsuario(String username) {
         if (username.contains(" ")) {
             System.out.println(Constantes.ERROR_ESPACIO.getValeur());
@@ -49,7 +51,7 @@ public class Usuario {
         }
         return true;
     }
-
+	// Methodo para solicictar la contraseña
     public String solicitarContrasena(String username) {
         String password;
         while (true) {
@@ -59,8 +61,8 @@ public class Usuario {
                 return password;
             }
         }
-    }
-
+    }	
+	// Metodo para validar la contraseña
     private boolean validarContrasena(String username, String password) {
         if (password.contains(" ")) {
             System.out.println(Constantes.ERROR_ESPACIO.getValeur());
@@ -84,10 +86,12 @@ public class Usuario {
         }
         return true;
     }
-
+	// Metodo para registrar el usuario
     public String registrarUsuario() {
         String username = solicitarNombreUsuario();
         String password = solicitarContrasena(username);
         return username + ":" + password;
     }
-}
+	
+
+}	
