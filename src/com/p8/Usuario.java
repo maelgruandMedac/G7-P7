@@ -1,16 +1,11 @@
 package com.p8;
 
 import java.util.Scanner;
+import com.p8.Constantes;
 
 public class Usuario {
     private String nombreUsuario;
     private Scanner sc;
-    private static final String ADMIN = "administrador";
-    private static final String ERROR_ESPACIO = "El nombre de usuario y la contrasena no deben contener espacios.";
-    private static final String ERROR_ADMIN = "La contrasena no puede ser 'admin' si el usuario es 'administrador'.";
-    private static final String ERROR_LONGITUD = "La contrasena debe tener al menos 4 caracteres.";
-    private static final String ERROR_IDENTICO = "El nombre de usuario y la contrasena no pueden ser identicos (insensible a mayusculas y minusculas).";
-    private static final String ERROR_CARACTER_ESPECIAL = "El nombre de usuario o la contrasena contiene un caracter no valido.";
 
     public Usuario(Scanner scan) {
         this.sc = scan;
@@ -41,15 +36,15 @@ public class Usuario {
 
     private boolean validarNombreUsuario(String username) {
         if (username.contains(" ")) {
-            System.out.println(ERROR_ESPACIO);
+            System.out.println(Constantes.ERROR_ESPACIO.getValeur());
             return false;
         }
-        if (!username.startsWith("_") && !username.equalsIgnoreCase(ADMIN)) {
+        if (!username.startsWith("_") && !username.equalsIgnoreCase(Constantes.ADMIN.getValeur())) {
             System.out.println("El nombre de usuario debe comenzar con '_' excepto para 'administrador'.");
             return false;
         }
         if (!username.matches("[a-zA-Z0-9_]+")) {
-            System.out.println(ERROR_CARACTER_ESPECIAL);
+            System.out.println(Constantes.ERROR_CARACTER_ESPECIAL.getValeur());
             return false;
         }
         return true;
@@ -68,23 +63,23 @@ public class Usuario {
 
     private boolean validarContrasena(String username, String password) {
         if (password.contains(" ")) {
-            System.out.println(ERROR_ESPACIO);
+            System.out.println(Constantes.ERROR_ESPACIO.getValeur());
             return false;
         }
-        if (username.equalsIgnoreCase(ADMIN) && password.equalsIgnoreCase("admin")) {
-            System.out.println(ERROR_ADMIN);
+        if (username.equalsIgnoreCase(Constantes.ADMIN.getValeur()) && password.equalsIgnoreCase("admin")) {
+            System.out.println(Constantes.ERROR_ADMIN.getValeur());
             return false;
         }
         if (password.length() < 4) {
-            System.out.println(ERROR_LONGITUD);
+            System.out.println(Constantes.ERROR_LONGITUD.getValeur());
             return false;
         }
         if (username.equalsIgnoreCase(password)) {
-            System.out.println(ERROR_IDENTICO);
+            System.out.println(Constantes.ERROR_IDENTICO.getValeur());
             return false;
         }
         if (!password.matches("[a-zA-Z0-9_]+")) {
-            System.out.println(ERROR_CARACTER_ESPECIAL);
+            System.out.println(Constantes.ERROR_CARACTER_ESPECIAL.getValeur());
             return false;
         }
         return true;
