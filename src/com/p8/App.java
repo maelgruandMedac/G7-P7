@@ -1,34 +1,46 @@
 package com.p8;
 
 import java.util.Scanner;
-import com.p8.Usuario;
 
 public class App {
     public static void main(String[] args) {
-        // Llamar a la clase Scanner de Java
         Scanner scanner = new Scanner(System.in);
-        // Llamar a mi propia clase Usuario
-        Usuario usuario1 = new Usuario(scanner);
+        Usuario usuario = null; 
+        boolean resultadoLogin;
 
-        // Variable para validar que un usuario esté registrado
-        String usuarioRegistrado = usuario1.registrarUsuario();
-        // Imprimir el resultado del registro
-        System.out.println("Usuario registrado: " + usuarioRegistrado);
+        // Registro del usuario
+        do {
+            System.out.println("=== REGISTRO ===");
+            System.out.print("Usuario: ");
+            String usuarioRegistro = scanner.nextLine().trim(); // Supprimer les espaces
+            System.out.print("Contraseña: ");
+            String passwordRegistro = scanner.nextLine().trim(); // Supprimer les espaces
 
-        // Iniciar sesión
-        System.out.println("Inicie sesion");
-        System.out.print("Nombre de usuario: ");
-        String username = scanner.nextLine();
-        System.out.print("Contrasena: ");
-        String password = scanner.nextLine();
+            usuario = Usuario.registrar(usuarioRegistro, passwordRegistro);
 
-        // Verificar las credenciales de inicio de sesión
-        if (usuario1.iniciarSesion(username, password)) {
-            System.out.println("Inicio de sesion exitoso.");
-        } else {
-            System.out.println("Inicio de sesion fallido.");
-        }
+            if (usuario != null) {
+                System.out.println("Registro exitoso.");
+            } else {
+                System.out.println("Registro fallido. Por favor, intente de nuevo.");
+            }
+        } while (usuario == null);
 
-        scanner.close(); // Importante cerrar el scanner
+        // Inicio de sesión del usuario
+        do {
+            System.out.println("=== INICIO DE SESIÓN ===");
+            System.out.print("Usuario: ");
+            String usuarioLogin = scanner.nextLine().trim(); // Supprimer les espaces
+            System.out.print("Contraseña: ");
+            String passwordLogin = scanner.nextLine().trim(); // Supprimer les espaces
+
+            resultadoLogin = usuario.login(usuarioLogin, passwordLogin);
+
+            if (!resultadoLogin) {
+                System.out.println("Inicio de sesión fallido. Por favor, intente de nuevo.");
+            }
+        } while (!resultadoLogin);
+
+        System.out.println("Inicio de sesión exitoso.");
+        scanner.close();
     }
 }

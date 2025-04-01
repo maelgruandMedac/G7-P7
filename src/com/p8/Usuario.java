@@ -1,114 +1,73 @@
 package com.p8;
 
-import java.util.Scanner;
-import com.p8.Constantes;
-
 public class Usuario {
-    private String nombreUsuario;
-    private String contrasena;
-    private Scanner sc;
+    private String credenciales;
+    private static final String SEPARADOR = ";";
 
-    // Constructor de la clase Usuario
-    public Usuario(Scanner scan) {
-        this.sc = scan;
+    private Usuario(String username, String password) {
+        this.credenciales = username.toLowerCase() + SEPARADOR + password;
     }
 
-    // Getters y Setters
-    public void setNombreUsuario(String username) {
-        this.nombreUsuario = username;
+    public String getCredenciales() {
+        String[] parts = credenciales.split(SEPARADOR);
+        return parts[0].toLowerCase() + SEPARADOR + parts[1];
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public Scanner getScanner() {
-        return sc;
-    }
-
-    // Metodo para validar el solicitado de nombre  de usuario
-    public String solicitarNombreUsuario() {
-        String username;
-        while (true) {
-            System.out.print("Ingrese el nombre de usuario: ");
-            username = sc.nextLine();
-            if (validarNombreUsuario(username)) {
-                return username;
-            }
+    public boolean login(String usuarioLogin, String passwordLogin) {
+        if (credenciales == null) {
+            return false;
         }
+
+        String[] parts = credenciales.split(SEPARADOR);
+        String storedUsername = parts[0];
+        String storedPassword = parts[1];
+
+        return storedUsername.equalsIgnoreCase(usuarioLogin) && storedPassword.equals(passwordLogin);
     }
 
-    // Boolean para validar Nombre de usuario
-    private boolean validarNombreUsuario(String username) {
+    public static Usuario registrar(String username, String password) {
+        if (validarUsuario(username) && validarPassword(username, password)) {
+            System.out.println("Registro exitoso.\n");
+            return new Usuario(username.toLowerCase(), password);
+        }
+        return null;
+    }
+
+    public static boolean validarUsuario(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return false;
+        }
         if (username.contains(" ")) {
-            System.out.println(Constantes.ERROR_ESPACIO.getValeur());
             return false;
         }
-        if (!username.startsWith("_") && !username.equalsIgnoreCase(Constantes.ADMIN.getValeur())) {
-            System.out.println("El nombre de usuario debe comenzar con '_' excepto para 'administrador'.");
+        if (!username.equalsIgnoreCase("administrador") && !username.startsWith("_")) {
             return false;
         }
-        if (!username.matches("[a-zA-Z0-9_]+")) {
-            System.out.println(Constantes.ERROR_CARACTER_ESPECIAL.getValeur());
+        if (username.contains(SEPARADOR)) {
             return false;
         }
         return true;
     }
 
-    // Methodo para solicictar la contraseña
-    public String solicitarContrasena(String username) {
-        String password;
-        while (true) {
-            System.out.print("Ingrese la contrasena: ");
-            password = sc.nextLine();
-            if (validarContrasena(username, password)) {
-                return password;
-            }
-        }
-    }
-
-    // Metodo para validar la contraseña
-    private boolean validarContrasena(String username, String password) {
-        if (password.contains(" ")) {
-            System.out.println(Constantes.ERROR_ESPACIO.getValeur());
+    public static boolean validarPassword(String username, String password) {
+        if (password == null || password.trim().isEmpty()) {
             return false;
         }
-        if (username.equalsIgnoreCase(Constantes.ADMIN.getValeur()) && password.equalsIgnoreCase("admin")) {
-            System.out.println(Constantes.ERROR_ADMIN.getValeur());
+        if (password.contains(" ")) {
+            return false;
+        }
+        if (username.equalsIgnoreCase("administrador") && password.equalsIgnoreCase("admin")) {
             return false;
         }
         if (password.length() < 4) {
-            System.out.println(Constantes.ERROR_LONGITUD.getValeur());
             return false;
         }
         if (username.equalsIgnoreCase(password)) {
-            System.out.println(Constantes.ERROR_IDENTICO.getValeur());
             return false;
         }
-        if (!password.matches("[a-zA-Z0-9_]+")) {
-            System.out.println(Constantes.ERROR_CARACTER_ESPECIAL.getValeur());
+        if (password.contains(SEPARADOR)) {
             return false;
         }
         return true;
-    }
-
-    // Metodo para registrar el usuario
-    public String registrarUsuario() {
-        String username = solicitarNombreUsuario();
-        String password = solicitarContrasena(username);
-        this.nombreUsuario = username.trim(); // Almacenamos el nombre de usuario sin espacios al inicio y al final
-        this.contrasena = password.trim();    // Almacenamos la contraseña sin espacios al inicio y al final
-        return this.nombreUsuario + ":" + this.contrasena;
-    }
-
-    // Metodo para iniciar sesión
-    public boolean iniciarSesion(String username, String password) {
-        username = username.trim();
-        password = password.trim();
-
-        if (this.nombreUsuario != null && this.contrasena != null) {
-            return this.nombreUsuario.equalsIgnoreCase(username) && this.contrasena.equals(password);
-        }
-        return false;
     }
 }
